@@ -1,12 +1,9 @@
 const express = require("express");
 const https = require("https");
-const bodyParser = require("body-parser");
 
 const app = express();
 
-const PORT = process.env.PORT || 8081;
-
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");
@@ -15,6 +12,7 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   const query = req.body.cityName;
   const apiKey = "dcb0c6b5d20f13991646df455226d3c1";
+
   const unit = "metric";
   const url =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -25,9 +23,6 @@ app.post("/", function (req, res) {
     unit;
 
   https.get(url, function (response) {
-    console.log(response.statusCode);
-    console.log(query);
-
     response.on("data", function (data) {
       const weatherData = JSON.parse(data);
       const temp = weatherData.main.temp;
@@ -48,6 +43,6 @@ app.post("/", function (req, res) {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(8080, () => {
+  console.log("Server is running on port 8080");
 });
